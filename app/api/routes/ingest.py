@@ -1,7 +1,11 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from pathlib import Path
+
+from pydantic import BaseModel
 from app.core.logger import logger
 
+from app.services.transcription import transcribe_audio
+from app.services.youtube_ingest import download_youtube_audio
 router = APIRouter()
 
 
@@ -30,3 +34,25 @@ async def upload_file(file: UploadFile = File(...)):
         "size_bytes": len(content),
         "path": str(save_path)
     }
+
+class YouTubeURL(BaseModel):
+    url: str
+
+@router.post("/youtube")
+def ingest_youtube(data: YouTubeURL):
+    try:
+        audio_path = download_youtube_audio(data.url)
+        return {"status": "success", "audio_path": audio_path}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+
+@router.post("/youtube-transcribe")
+def ingest_youtube_transcribe(data: YouTubeURL):
+    try:
+        audio_path = download_youtube_audio(data.url)
+        text = transcribe_audio(audio_path)
+        return {"status": "success", "audio_path": audio_path, "transcript": text}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

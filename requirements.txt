@@ -4,3 +4,5 @@ python-dotenv
 pydantic_settings
 pathlib
 python-multipart
+openai-whisper
+yt-dlp
