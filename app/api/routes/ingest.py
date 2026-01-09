@@ -6,6 +6,8 @@ from app.core.logger import logger
 
 from app.services.transcription import transcribe_audio
 from app.services.youtube_ingest import download_youtube_audio
+from app.services.transcription import transcribe_audio
+
 router = APIRouter()
 
 
@@ -52,7 +54,17 @@ def ingest_youtube(data: YouTubeURL):
 def ingest_youtube_transcribe(data: YouTubeURL):
     try:
         audio_path = download_youtube_audio(data.url)
-        text = transcribe_audio(audio_path)
-        return {"status": "success", "audio_path": audio_path, "transcript": text}
+
+        transcription_info = transcribe_audio(audio_path)
+
+        return {
+            "status": "success",
+            "audio_path": audio_path,
+            "transcription": transcription_info
+        }
+
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=400, detail=str(e))
+

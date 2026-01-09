@@ -1,37 +1,27 @@
-import os
-import re
-import yt_dlp
+
+from yt_dlp import YoutubeDL
 from pathlib import Path
 
+def download_youtube_audio(url: str, output_dir="storage") -> str:
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-def sanitize_filename(name: str) -> str:
-    """
-    Remove or replace characters that are invalid in Windows filenames.
-    """
-    # Replace invalid characters with underscore
-    return re.sub(r'[<>:"/\\|?*#…]', '_', name)
-
-STORAGE_DIR = Path("storage")
-STORAGE_DIR.mkdir(exist_ok=True)
-
-def download_youtube_audio(url: str) -> str:
-    """
-    Download audio from YouTube and return path to saved audio file
-    """
-    output_template = str(STORAGE_DIR / "%(title)s.%(ext)s")
     ydl_opts = {
         "format": "bestaudio/best",
-        "outtmpl": output_template,
+        "outtmpl": str(output_dir / "%(title)s.%(ext)s"),
         "postprocessors": [{
             "key": "FFmpegExtractAudio",
             "preferredcodec": "m4a",
-            "preferredquality": "128",
         }],
-        "quiet": False,
+        "quiet": True,
     }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info_dict = ydl.extract_info(url, download=True)
-        title = sanitize_filename(info_dict.get("title", "audio"))
-        filename = STORAGE_DIR / f"{title}.m4a"
-        return str(filename)
+    with YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=True)
+
+        # 🔒 THIS IS THE KEY LINE
+        filename = ydl.prepare_filename(info)
+        audio_path = Path(filename).with_suffix(".m4a")
+
+    return str(audio_path)
+ 
