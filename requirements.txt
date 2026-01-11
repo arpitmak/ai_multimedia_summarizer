@@ -6,3 +6,5 @@ pathlib
 python-multipart
 openai-whisper
 yt-dlp
+sentence-transformers 
+chromadb
