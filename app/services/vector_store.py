@@ -1,34 +1,33 @@
-import chromadb
+# app/services/vector_store.py
+
 from pathlib import Path
-from typing import List, Dict
+import chromadb
+from chromadb.utils import embedding_functions
 
-CHROMA_DIR = "storage/vectors"
-COLLECTION_NAME = "multimedia_chunks"
+BASE_DIR = Path(__file__).resolve().parents[2]
+CHROMA_DIR = BASE_DIR / "storage" / "chroma"
 
+# Persistent client (NEW API)
+client = chromadb.PersistentClient(
+    path=str(CHROMA_DIR)
+)
 
-def get_collection():
-    Path(CHROMA_DIR).mkdir(parents=True, exist_ok=True)
+collection = client.get_or_create_collection(
+    name="multimedia_chunks"
+)
 
-    client = chromadb.PersistentClient(path=CHROMA_DIR)
+def store_chunks(chunks, embeddings):
+    print(f"Adding vectors: {len(chunks)}")
 
-    return client.get_or_create_collection(
-        name=COLLECTION_NAME
-    )
-
-
-def store_chunks(chunks: List[Dict], embeddings: List[List[float]]):
-    collection = get_collection()
+    ids = [f"{c['source']}_{i}" for i, c in enumerate(chunks)]
+    documents = [c["text"] for c in chunks]
+    metadatas = [{"source": c["source"]} for c in chunks]
 
     collection.add(
-        ids=[f"chunk_{c['chunk_id']}" for c in chunks],
-        documents=[c["text"] for c in chunks],
-        metadatas=[
-            {
-                "source": c["source"],
-                "start_time": c["start_time"],
-                "end_time": c["end_time"],
-            }
-            for c in chunks
-        ],
+        ids=ids,
+        documents=documents,
         embeddings=embeddings,
+        metadatas=metadatas
     )
+
+    print("Stored successfully")

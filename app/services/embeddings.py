@@ -1,21 +1,16 @@
 from sentence_transformers import SentenceTransformer
-from typing import List
+from typing import List, Dict
 
-# Small, fast, free, widely used
+# Free, fast, CPU-friendly
 MODEL_NAME = "all-MiniLM-L6-v2"
 
-_model = None
+model = SentenceTransformer(MODEL_NAME)
 
 
-def get_embedding_model():
-    global _model
-    if _model is None:
-        _model = SentenceTransformer(MODEL_NAME)
-    return _model
-
-
-def embed_texts(texts: List[str]) -> List[List[float]]:
-    model = get_embedding_model()
-    embeddings = model.encode(texts, show_progress_bar=False)
+def embed_chunks(chunks: List[Dict]) -> List[List[float]]:
+    """
+    Generate embeddings for chunk texts.
+    """
+    texts = [chunk["text"] for chunk in chunks]
+    embeddings = model.encode(texts, show_progress_bar=True)
     return embeddings.tolist()
- 
