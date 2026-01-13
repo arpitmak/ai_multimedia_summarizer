@@ -3,6 +3,7 @@ from app.core.config import settings
 from app.core.logger import logger
 from app.api.routes.health import router as health_router
 from app.api.routes.ingest import router as ingest_router
+from app.api.routes.query import router as query_router
 
 app = FastAPI(
     title=settings.app_name,
@@ -12,6 +13,11 @@ app = FastAPI(
 
 app.include_router(health_router, prefix="/api/v1")
 app.include_router(ingest_router, prefix="/api/v1/ingest")
+app.include_router(
+    query_router,
+    prefix="/api/v1",
+    tags=["Query"]
+)
 
 
 @app.on_event("startup")
