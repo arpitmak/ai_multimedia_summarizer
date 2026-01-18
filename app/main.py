@@ -6,6 +6,7 @@ from app.api.routes.ingest import router as ingest_router
 from app.api.routes.query import router as query_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import summary
+from app.api.routes import qa
 app = FastAPI(
     title=settings.app_name,
     description="Backend API for RAG-based multimedia summarization",
@@ -35,6 +36,7 @@ app.include_router(
     tags=["Query"]
 )
 app.include_router(summary.router, prefix="/api/v1",tags=["summary"])
+app.include_router(qa.router)
 
 
 @app.on_event("startup")

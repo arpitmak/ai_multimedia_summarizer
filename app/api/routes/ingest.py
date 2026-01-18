@@ -8,6 +8,11 @@ from app.services.transcription import transcribe_audio
 from app.services.youtube_ingest import download_youtube_audio
 from app.services.transcription import transcribe_audio
 
+from app.services.chunking import chunk_transcript
+from app.services.embeddings import embed_chunks
+from app.services.vector_store import store_chunks
+from app.services.chunking import save_chunks
+
 router = APIRouter()
 
 
@@ -68,3 +73,56 @@ def ingest_youtube_transcribe(data: YouTubeURL):
         traceback.print_exc()
         raise HTTPException(status_code=400, detail=str(e))
 
+
+class QnAIngestRequest(BaseModel):
+    source_type: str  # "youtube" | "local"
+    source: str       # url or filename
+
+
+@router.post("/qna")
+def ingest_for_qna(data: QnAIngestRequest):
+    try:
+        # 1️⃣ Resolve audio
+        if data.source_type == "youtube":
+            audio_path = download_youtube_audio(data.source)
+
+        elif data.source_type == "local":
+            audio_path = STORAGE_DIR / data.source
+            if not audio_path.exists():
+                raise HTTPException(status_code=404, detail="File not found")
+
+        else:
+            raise HTTPException(status_code=400, detail="Invalid source_type")
+
+        # 2️⃣ Transcribe
+        transcription = transcribe_audio(str(audio_path))
+        transcript_path = transcription["transcript_path"]
+
+        # 3️⃣ Chunk
+        chunks = chunk_transcript(
+            transcript_path=transcript_path,
+            source=data.source_type
+        )
+        
+
+        chunk_file = save_chunks(
+        chunks=chunks,
+        transcript_path=transcript_path
+        )
+
+
+        if not chunks:
+            raise HTTPException(status_code=400, detail="No chunks generated")
+
+        
+
+        # 5️⃣ Store
+        store_chunks(chunks)
+
+        return {
+            "status": "success",
+            "chunks_added": len(chunks)
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
