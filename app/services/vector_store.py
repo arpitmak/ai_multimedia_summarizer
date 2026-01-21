@@ -2,28 +2,27 @@ from pathlib import Path
 import chromadb
 from chromadb.utils import embedding_functions
 
-# ---------- Paths ----------
 BASE_DIR = Path(__file__).resolve().parents[2]
 CHROMA_DIR = BASE_DIR / "storage" / "chroma"
 CHROMA_DIR.mkdir(parents=True, exist_ok=True)
 
-# ---------- Embedding Function ----------
+
 embedding_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
     model_name="all-MiniLM-L6-v2"
 )
 
-# ---------- Chroma Client ----------
+
 client = chromadb.PersistentClient(
     path=str(CHROMA_DIR)
 )
 
-# ---------- Collection ----------
+
 collection = client.get_or_create_collection(
     name="multimedia_chunks",
     embedding_function=embedding_fn
 )
 
-# ---------- Store ----------
+
 def store_chunks(chunks: list):
     """
     Store text chunks in Chroma.
@@ -53,7 +52,7 @@ def store_chunks(chunks: list):
 
     print(f"Stored {len(chunks)} chunks in Chroma")
 
-# ---------- Query ----------
+
 def query_chunks(query: str, n_results: int = 5):
     """
     Semantic search over stored chunks.
@@ -64,4 +63,23 @@ def query_chunks(query: str, n_results: int = 5):
         n_results=n_results
     )
 
+def reset_collection():
+    """
+    Delete existing collection and recreate it.
+    Called before every new ingestion.
+    """
+    global collection
+
+    try:
+        client.delete_collection("multimedia_chunks")
+        print("Existing Chroma collection deleted")
+    except Exception:
+        pass  # collection may not exist yet
+
+    collection = client.get_or_create_collection(
+        name="multimedia_chunks",
+        embedding_function=embedding_fn
+    )
+
+    print("Fresh Chroma collection created")
 

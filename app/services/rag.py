@@ -1,21 +1,26 @@
+# app/services/rag.py
+
 from app.services.retriever import retrieve_chunks
-import ollama
+from app.services.llm.openai_llm import llm_complete
 
 
-def build_rag_prompt(context: str, query: str) -> str:
-    return f"""
-You are a knowledgeable assistant answering questions using ONLY the provided context.
+def rag_answer(query: str) -> dict:
+    chunks = retrieve_chunks(query)
 
-Rules:
-- Use only the information in the context below
-- If the answer is not in the context, say: "The information is not available in the provided content."
-- Do not make up facts
-- Be concise and clear
+    if not chunks:
+        return {"answer": "No relevant context found."}
+
+    context = "\n\n".join(
+        f"- {c['text']}" for c in chunks
+    )
+
+    prompt = f"""
+You are an expert assistant.
+Answer the question ONLY using the context below.
+If the answer is not in the context, say so clearly.
 
 Context:
-----------------
 {context}
-----------------
 
 Question:
 {query}
@@ -23,23 +28,17 @@ Question:
 Answer:
 """
 
+    answer = llm_complete(prompt)
 
-def rag_answer(query: str) -> str:
-    chunks = retrieve_chunks(query, top_k=4)
+    return {
+        "answer": answer,
+        "sources": [
+            {
+                "chunk_id": c["metadata"]["chunk_id"],
+                "source": c["metadata"]["source"],
+            }
+            for c in chunks
+        ],
+    }
 
-    context = "\n\n".join(
-        f"[Chunk {i+1}] {c['text']}"
-        for i, c in enumerate(chunks)
-    )
 
-    prompt = build_rag_prompt(context, query)
-
-    response = ollama.chat(
-        model="llama3",
-        messages=[
-            {"role": "system", "content": "You answer questions from provided lecture notes."},
-            {"role": "user", "content": prompt}
-        ]
-    )
-
-    return response["message"]["content"]

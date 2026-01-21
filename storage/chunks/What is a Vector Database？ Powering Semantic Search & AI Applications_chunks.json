@@ -1,0 +1,72 @@
+[
+  {
+    "chunk_id": 0,
+    "text": "What is a vector database? Well, let's say a picture is worth a thousand words, so let's start with one. Now, in case you can't tell, this is a picture of each sunset on a mountain vista. Beautiful. Now, let's say this is a digital image and we want to store it. We want to put it in to a database. And we're going to use a traditional database here called a relational database. Now, what can we store in that relational database of this picture? Well, we can put the actual picture binary data into our database to start with. So this is the actual image file. But we can also store some other information as well, like some basic metadata about the picture. So that would be things like the file format and the date that it was created, stuff like that. And we can also add some manually added tags to this as well. So we could say let's have tags for sunset and landscape and orange. And that sort of gives us a basic way to be able to retrieve",
+    "start_time": 0.0,
+    "end_time": 71.68,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 1,
+    "text": "ags to this as well. So we could say let's have tags for sunset and landscape and orange. And that sort of gives us a basic way to be able to retrieve this image. But it kind of largely misses the images overall semantic context. Like how would you query for images with similar color palettes, for example, using this information or images with landscapes of mountains in the background, for example, those concepts aren't really represented very well in these structured fields. And that disconnect between how computer store data and how humans understand it has a name. It's called the semantic gap. Now, traditional database queries like select star where color equals orange. It kind of falls short because it doesn't really capture the nuanced multi-dimensional nature of unstructured data. Well, that's where vector databases come in by representing data as mathematical vector embeddings. And what vector embeddings are,",
+    "start_time": 71.68,
+    "end_time": 134.64,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 2,
+    "text": "unstructured data. Well, that's where vector databases come in by representing data as mathematical vector embeddings. And what vector embeddings are, essentially, the array of numbers. Now, these vectors, they capture the semantic essence of a data where similar items are positioned close together in vector space and dissimilar items are positioned far apart. And with vector databases, we can perform similarity searches as mathematical operations, looking for vector embeddings that are close to each other. And that kind of translates through finding semantically similar content. Now, we can represent all sorts of unstructured data in a vector database. What could we put in here? Well, image files, of course, like our mountain sunset. We could put in a text file as well, or we could even store audio files as well in here. All this is unstructured data. And these complex objects, they are actually transformed",
+    "start_time": 135.6,
+    "end_time": 190.88,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 3,
+    "text": "e as well, or we could even store audio files as well in here. All this is unstructured data. And these complex objects, they are actually transformed into vector embeddings. And those vector embeddings are then stored in the vector database. So what do these vector embeddings look like? Well, I said they're arrays of numbers. And they're arrays of numbers where each position represents some kind of learned feature. So let's take a simplified example. So remember our mountain picture here. Yep, we can represent that as a vector embedding. Now, let's say that the vector embedding for the mountain has a first dimension of say 0.9. One, then let's say the next one is 0.15. And there's a third dimension of 0.83. And kind of so forth. Well, that's all that mean. Well, the 0.91 in the first dimension, that indicates significant elevation changes because hey, this is the mountains. Then 0.15, the second dimension here that",
+    "start_time": 191.52,
+    "end_time": 253.92000000000002,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 4,
+    "text": ".91 in the first dimension, that indicates significant elevation changes because hey, this is the mountains. Then 0.15, the second dimension here that shows few urban elements. Don't see many buildings here. So that's why that score is quite low. 0.83 in the third dimension. That represents strong warm colors like a sunset and so on. All sorts of other dimensions can be added as well. Now we can compare that to a different picture. What about this one, which is a sunset at the beach? So let's have a look at the vector embeddings for the beach example. So this would also have a series of dimensions. Let's say the first one is 0.12. Then we have a 0.08. And then finally, we have a 0.89. And then more dimensions to follow. Now, notice how there are some similarities here. The third dimension, 0.83 and 0.89, pretty similar. That's because they both have warm colors. They're both pictures of sunsets. But the first dimension,",
+    "start_time": 253.92000000000002,
+    "end_time": 315.28,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 5,
+    "text": "third dimension, 0.83 and 0.89, pretty similar. That's because they both have warm colors. They're both pictures of sunsets. But the first dimension, that differs quite a lot here because a beach has minimal elevation changes compared to the mountains. Now this is a very simplified example in real machine learning systems. Vector embeddings typically contain hundreds or even thousands of dimensions. And I should also say that individual dimensions like this, they rarely correspond to such clearly interpretable features, but you get the idea. And this all brings up the question of how are these spectrum embeddings actually created? Well, the answer is through embedding models that have been trained on massive data sets. So each time of data has its own specialized type of embedding model that we can use. So I'm going to give you some examples of those. For example, clip. You might use clip for images. If you're working with",
+    "start_time": 315.91999999999996,
+    "end_time": 372.32,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 6,
+    "text": "dding model that we can use. So I'm going to give you some examples of those. For example, clip. You might use clip for images. If you're working with text, you might use glove. And if you're working with audio, you might use WAV2. Heck, these processes are all kind of pretty similar. Basically, you have data that passes through multiple layers. And as it goes through the layers of the embedding model, each layer is extracting progressively more abstract features. So for images, the early layers might detect some pretty basic stuff like, let's say, edges. And then as we get to deeper layers, we would recognize more complex stuff like maybe entire objects. Or perhaps for text, these early layers would figure out the words that we're looking at individual words. But then later, deeper layers would be able to figure out context and meaning. And how this essentially works is we take the high-dimensional",
+    "start_time": 372.32,
+    "end_time": 432.40000000000003,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 7,
+    "text": "l words. But then later, deeper layers would be able to figure out context and meaning. And how this essentially works is we take the high-dimensional vectors from this deeper layer here. And those high-dimensional vectors often have hundreds or maybe even thousands of dimensions that capture the essential characteristics of the input. Now we have vector embeddings created. We can perform all sorts of powerful operations that just weren't possible with those traditional relational databases, things like similarity search where we can find items that are similar to a query item by finally closest vectors in the space. But when you have millions of vectors in your database, and those vectors are made up of hundreds or maybe even thousands of dimensions, you can't effectively and efficiently compare your query vector to every single vector in the database. It would just be too slow. So there is a process",
+    "start_time": 432.40000000000003,
+    "end_time": 483.36,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 8,
+    "text": "u can't effectively and efficiently compare your query vector to every single vector in the database. It would just be too slow. So there is a process to do that and it's called vector indexing. Now this is where vector indexing uses something called approximate nearest neighbor or a n n algorithms. And instead of finding the exact closest match, these algorithms quickly find vectors that are very likely to be among the closest matches. Now there are a bunch of approaches for this. For example, HNSW, that is hierarchical, navigable, small world. That creates multi-layered graphs connecting similar vectors. And there's also IVF that's inverted file index, which divides the vector space into clusters and only searches the most relevant of those clusters. These indexing methods are basically a trading a small amount of accuracy for pretty big improvements in search speed. Now vector databases are a core feature of something called",
+    "start_time": 483.36,
+    "end_time": 542.72,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 9,
+    "text": "asically a trading a small amount of accuracy for pretty big improvements in search speed. Now vector databases are a core feature of something called rag, retrieval, augmented generation. Where vector databases store chunks of documents and articles and knowledge bases as embeddings. And then when you use ask the question, the system finds the relevant text chunks by comparing vector similarity and feeds those to a large language model to generate responses using the retrieved information. So that's vector databases. They are both a place to store unstructured data and a place to retrieve it quickly and semantically.",
+    "start_time": 542.72,
+    "end_time": 579.36,
+    "source": "youtube"
+  }
+]

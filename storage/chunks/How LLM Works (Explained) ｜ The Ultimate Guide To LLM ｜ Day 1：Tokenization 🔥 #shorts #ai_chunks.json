@@ -1,0 +1,23 @@
+[
+  {
+    "chunk_id": 0,
+    "text": "So this is day one of understanding how LLM's work. Let's go with tokenization. Tokenization is a process that makes LLM understand natural languages like English easily by chopping it into pieces. So if you think carefully, we humans also understand English in this way. Imagine you're watching a movie and suddenly you saw a new word in the subtitles which you don't know the meaning. We humans figure out the meaning of the new word intruder through the context and the meaning of the surrounding words. However, LLM's don't understand words like we do. They rely on statistical patterns from their training data. And using this data, the sentence will be converted to a bunch of tokens. But mind you, this breaking follows a series of procedures. First, it checks the words in a sentence against the tokens it already has. In general, during the training phase, the LLM's build a vocabulary of common words, sub words and symbols. GPT-4's vocabulary has more than 100,000 tokens in its arsenal.",
+    "start_time": 0.0,
+    "end_time": 55.0,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 1,
+    "text": "e training phase, the LLM's build a vocabulary of common words, sub words and symbols. GPT-4's vocabulary has more than 100,000 tokens in its arsenal. So second, if the words are not there, the LLM will consider them as rare and then chop into tokens which include space and punctuations. So this is how a full sentence will be divided. What I'm wanting to, what, a, morning and then a question mark. So token length here is four. But in our perception, we usually treat it as three. Since we don't count question marks separately. So that's how it works. Also, LLM's usually consider the max token limit by taking both your given input and the generated output into consideration. It's like LLM has a text budget. So if your prompt uses 3500 tokens and the response needs 600 tokens. But the model limit is 4000, boom, it throws an error. So this is how tokenization in LLM's work. Next time, remember this, every space and symbols count when you are communicating with LLM.",
+    "start_time": 55.0,
+    "end_time": 101.0,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 2,
+    "text": "rows an error. So this is how tokenization in LLM's work. Next time, remember this, every space and symbols count when you are communicating with LLM. See you next time with a new video in this series. Let's explore and understand A.A. together. Subscribe for more interesting tech videos like these.",
+    "start_time": 101.0,
+    "end_time": 109.0,
+    "source": "youtube"
+  }
+]

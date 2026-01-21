@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from app.services.youtube_ingest import download_youtube_audio
 from app.services.transcription import transcribe_audio
-from app.services.chunking import chunk_transcript
+from app.services.chunking import chunk_transcript,save_chunks
 from app.services.summarizer import stream_summary
 
 router = APIRouter(prefix="/summary", tags=["Summary"])
@@ -41,6 +41,11 @@ def generate_summary(data: SummaryRequest):
 
     # 3️⃣ CHUNK
     chunks = chunk_transcript(transcript_path)
+
+    chunk_file = save_chunks(
+        chunks=chunks,
+        transcript_path=transcript_path,
+        )
 
     # 4️⃣ STREAM SUMMARY
     return StreamingResponse(

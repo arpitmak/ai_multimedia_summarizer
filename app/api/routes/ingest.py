@@ -12,6 +12,8 @@ from app.services.chunking import chunk_transcript
 from app.services.embeddings import embed_chunks
 from app.services.vector_store import store_chunks
 from app.services.chunking import save_chunks
+from app.services.vector_store import reset_collection
+
 
 router = APIRouter()
 
@@ -82,7 +84,7 @@ class QnAIngestRequest(BaseModel):
 @router.post("/qna")
 def ingest_for_qna(data: QnAIngestRequest):
     try:
-        # 1️⃣ Resolve audio
+        
         if data.source_type == "youtube":
             audio_path = download_youtube_audio(data.source)
 
@@ -94,11 +96,11 @@ def ingest_for_qna(data: QnAIngestRequest):
         else:
             raise HTTPException(status_code=400, detail="Invalid source_type")
 
-        # 2️⃣ Transcribe
+        
         transcription = transcribe_audio(str(audio_path))
         transcript_path = transcription["transcript_path"]
 
-        # 3️⃣ Chunk
+        
         chunks = chunk_transcript(
             transcript_path=transcript_path,
             source=data.source_type
@@ -107,7 +109,7 @@ def ingest_for_qna(data: QnAIngestRequest):
 
         chunk_file = save_chunks(
         chunks=chunks,
-        transcript_path=transcript_path
+        transcript_path=transcript_path,
         )
 
 
@@ -116,7 +118,7 @@ def ingest_for_qna(data: QnAIngestRequest):
 
         
 
-        # 5️⃣ Store
+        reset_collection() #reset chroma
         store_chunks(chunks)
 
         return {
