@@ -1,0 +1,23 @@
+[
+  {
+    "chunk_id": 0,
+    "text": "Hey guys how you all doing? So this is going to be a very quick video about how you can deploy a web service onto the router. So I have a fast API in Python that is and I'm going to deploy it on the render. Earlier I was using hero who but since you know it is those so I had to find out an alternative and I found out what the render. So let's see how you can deploy it onto the first API onto the render. So this is basically my main or pia I have allowed across origin and all things this is a simple route. So let's see how to do it. First you're going to sign up I did sign up with the GitHub so I automatically got it automatically has access to all my repository and now I'm going to click on new web service since I'm going to deploy a API so I choose new web service so I have to connect a repository you can choose anything but since I already have this first API that is connected so I'm going to do the connect.",
+    "start_time": 0.0,
+    "end_time": 68.32,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 1,
+    "text": "ce so I have to connect a repository you can choose anything but since I already have this first API that is connected so I'm going to do the connect. Okay or if you have a public it was you can see it's IPR. So I'll click on connect and then I'm going to name it something like test API and what is the branch I have two branch man and development so I'm going to deploy my main branch okay and this is Python 3 and yeah you have to since I was using hero who so I had this stock file but right now it is no use of that and if I don't even think it is the runtime of txt so it will ignore those two files and since it is it is a first API so I'll have so it's start command will be this one okay I'll explain you what is that it will do so first of all you have this requirement text so see I already have this requirement text and everything so it will take it from here and yeah this this is going to be the the start command so this is the main is this main is the",
+    "start_time": 69.44,
+    "end_time": 142.24,
+    "source": "youtube"
+  },
+  {
+    "chunk_id": 2,
+    "text": "ement text and everything so it will take it from here and yeah this this is going to be the the start command so this is the main is this main is the my me dot main the main file if it has something like test dot pw so you had to write here test okay this is the basic basic things and you just have to like create them some instances it will take some time and then so yeah you can see that it is building and it will take few minutes so I'm going to fast forward okay so it is finished now you can see that deploying starting service and now if you go to here this one here and click on this you should be able to see your API yeah this was it so basically you can see basically you have to know about the build command will be this since I was using a fast API so it was this and there are going to be different build commands so you have to look for the docs this was the tutorial for for fast API so yeah thank you for watching",
+    "start_time": 142.64,
+    "end_time": 232.16,
+    "source": "youtube"
+  }
+]
