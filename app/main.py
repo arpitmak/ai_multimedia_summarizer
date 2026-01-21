@@ -33,7 +33,7 @@ app.include_router(
     tags=["Query"]
 )
 app.include_router(summary.router, prefix="/api/v1",tags=["summary"])
-app.include_router(qa.router)
+app.include_router(qa.router,prefix="/qa", tags=["QnA"])
 
 
 @app.on_event("startup")
