@@ -4,6 +4,8 @@ An AI-powered backend application that ingests Youtube content (YouTube URL) and
 
 Built with FastAPI and focused on practical GenAI system design.
 
+Demo Video-https://drive.google.com/file/d/1WJsIC1LXJP7E8niUk8vv8PmDb22Tzvi0/view?usp=drive_link
+
 Features
 
 Youtube ingestion (YouTube URL)
