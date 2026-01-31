@@ -7,6 +7,10 @@ from app.api.routes.query import router as query_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import summary
 from app.api.routes import qa
+from pathlib import Path
+from dotenv import load_dotenv
+ENV_PATH = Path(__file__).resolve().parent.parent / ".env"
+load_dotenv(dotenv_path=ENV_PATH, override=True)
 app = FastAPI(
     title=settings.app_name,
     description="Backend API for RAG-based multimedia summarization",

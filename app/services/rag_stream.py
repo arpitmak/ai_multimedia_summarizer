@@ -19,6 +19,10 @@ def rag_stream_answer(query: str) -> Generator[str, None, None]:
     prompt = f"""
 You are an expert assistant.
 Answer the question ONLY using the context below.
+You must answer using ONLY the provided context.
+If the answer is not present in the context, say:
+"Not found in the ingested content."
+Do not use outside knowledge.
 
 Context:
 {context}

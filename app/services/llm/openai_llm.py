@@ -1,38 +1,33 @@
-
-# app/services/llm/openai_llm.py
-
-import os
 from typing import Generator
 from openai import OpenAI
-from dotenv import load_dotenv
+from app.core.config import settings
 
+if not settings.openrouter_api_key:
+    raise RuntimeError("OPENROUTER_API_KEY is missing. Check your .env and app startup loading.")
 
-load_dotenv()
+client = OpenAI(
+    api_key=settings.openrouter_api_key,
+    base_url="https://openrouter.ai/api/v1",
+)
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-
-MODEL = "gpt-4o-mini"  
-
+MODEL = "arcee-ai/trinity-large-preview:free"
 
 def llm_complete(prompt: str) -> str:
-    """
-    Non-streaming completion (used in QnA)
-    """
-    response = client.chat.completions.create(
+    res = client.chat.completions.create(
         model=MODEL,
         messages=[
             {"role": "system", "content": "You are a helpful AI assistant."},
             {"role": "user", "content": prompt},
         ],
         temperature=0.3,
+        extra_headers={
+            "HTTP-Referer": settings.openrouter_site_url,
+            "X-Title": settings.openrouter_app_name,
+        },
     )
-    return response.choices[0].message.content
-
+    return res.choices[0].message.content or ""
 
 def llm_stream(prompt: str) -> Generator[str, None, None]:
-    """
-    Streaming completion (used in summary + streaming QnA)
-    """
     stream = client.chat.completions.create(
         model=MODEL,
         messages=[
@@ -41,8 +36,11 @@ def llm_stream(prompt: str) -> Generator[str, None, None]:
         ],
         temperature=0.3,
         stream=True,
+        extra_headers={
+            "HTTP-Referer": settings.openrouter_site_url,
+            "X-Title": settings.openrouter_app_name,
+        },
     )
-
     for chunk in stream:
-        if chunk.choices and chunk.choices[0].delta.content:
+        if chunk.choices and chunk.choices[0].delta and chunk.choices[0].delta.content:
             yield chunk.choices[0].delta.content
